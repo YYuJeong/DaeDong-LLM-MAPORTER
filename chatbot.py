@@ -15,9 +15,7 @@ from langchain.agents import create_tool_calling_agent, AgentExecutor
 import pandas as pd
 # .env 파일 로드
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-# API 키를 환경변수로 관리하기 위한 설정 파일
 os.environ['OPENAI_API_KEY'] = st.secrets["OPENAI_API_KEY"]
-
 # 폴더 경로 설정
 folder_path = "./data"  # 분석할 파일이 저장된 폴더 경로
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=50, chunk_overlap=10)
@@ -211,7 +209,7 @@ def main():
     # 페이지 설정
     st.set_page_config(page_title="마포터", layout="wide", page_icon="🤖")
 
-    st.image('chatbot_image.png', width=600)
+    st.image('Maporter_image.png', width=600)
     st.markdown('---')
     st.title("안녕하세요! 대동 마포터 입니다")  # 시작 타이틀
 
