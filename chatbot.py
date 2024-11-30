@@ -150,13 +150,18 @@ def main():
                 
                 
                 Make sure to follow the format of [기사 제목], [기사 날짜], [뉴스 내용], and [뉴스 출처, just like the ## Example. Ensure there is a line break after each entry.
-                ## Example
-                [기사 제목] 정길수 전남도의원 “강대찬 벼 미질 논란 후속 조치 미흡” \n\n
-                [기사 날짜] 24-11-08 \n\n
-                [뉴스 내용] \n
-                 * 기술원에서 보완 및 추진 사항에 대한 보고가 누락되었다는 지적이 있습니다. \n
-                 * 생태농업이 산업적 농업의 지속가능성을 보완하기 위한 기술적 선택지로 간주되고 있습니다. \n\n
-                [뉴스 출처] url \n\n
+                ## Example (Strictly follow this)
+                **[기사 제목]** Example Title  
+                **[기사 날짜]** Example Date  
+                **[뉴스 내용]**  
+                Summary: This is a brief summary of the news content. It should contain 2–3 sentences.  
+
+                Key Points:  
+                - • First key point of the news.  
+                - • Second key point of the news.  
+                - • Third key point of the news.  
+
+                **[뉴스 출처]** URL
                  '''),
                 ("placeholder", "{chat_history}"),
                 ("human", "{input} \n\n Be sure to include emoji in your responses."),
