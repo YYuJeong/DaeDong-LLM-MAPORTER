@@ -141,10 +141,10 @@ def main():
             
                 #Format
 
-                **[기사 제목]** Title of the news article n\n\n
-                **[기사 날짜]** Date of the news article \n\n
-                **[뉴스 내용]** First, provide a 2–3 sentence summary of the overall news content. Then, summarize the main points again in a bullet point format. \n\n\n
-                **[뉴스 출처]** URL link to the original news article \n\n\n
+                **[기사 제목]** Title of the news article **n\n\n
+                **[기사 날짜]** Date of the news article **\n\n
+                **[뉴스 내용]** First, provide a 2–3 sentence summary of the overall news content. Then, summarize the main points again in a bullet point format. **\n\n\n
+                **[뉴스 출처]** URL link to the original news article **\n\n\n
                  
                  '''),
                 ("placeholder", "{chat_history}"),
