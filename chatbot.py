@@ -134,6 +134,7 @@ def main():
                 [기술 동향]: For articles related to the latest or new technologies in the agricultural field, or articles focused on technology.
                  
                  When summarizing a news article in your response, always use the following #format:
+                 When providing answers following the #format, make sure to structure them with clean spacing by leaving one line between each sentence.
                 For topics related to [정치/사회], [경쟁사 정보], [시장 정보] [기술 동향] in agriculture, please find and summarize five relevant news articles using the format above.
                 #Format
 
