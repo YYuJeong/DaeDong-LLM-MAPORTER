@@ -135,7 +135,7 @@ def main():
                  
                  When summarizing a news article in your response, always use the following #format:
                  When providing answers following the #format, make sure to structure them with clean spacing by leaving one line between each sentence.
-                When writing [뉴스 내용] in the #format, always summarize the full content of the article using 3~5 bullet points. Ensure the points are clear, concise, and at least one full line long.
+                When writing [뉴스 내용] in the #format, always summarize the full content of the article using 3~5 bullet points. and Make sure to write it in multiple lines, not just one line. 
                 For topics related to [정치/사회], [경쟁사 정보], [시장 정보] [기술 동향] in agriculture, please find and summarize five relevant news articles using the format above.
                 
             
@@ -143,7 +143,7 @@ def main():
 
                 **[기사 제목]** Title of the news article **n\n\n
                 **[기사 날짜]** Date of the news article **\n\n
-                **[뉴스 내용]** First, provide a 2–3 sentence summary of the overall news content. Then, summarize the main points again in 3~5 bullet points format. **\n\n\n
+                **[뉴스 내용]** Make sure to write it in **multiple lines**, not just one line. First, provide a 2–3 sentence summary of the overall news content. Then, summarize the main points again in 3~5 bullet points format. **\n\n\n
                 **[뉴스 출처]** URL link to the original news article **\n\n\n
                 
                 
