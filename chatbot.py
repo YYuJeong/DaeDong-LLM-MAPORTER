@@ -106,7 +106,7 @@ def main():
 
     # 특정 PDF 경로 지정
     # CSV 데이터 로드
-    csv_path = './data/news_classified_updated_utf8.csv'
+    csv_path = './data/news_classified_updated_utf8.csv' 
     if csv_path:
         pdf_search = load_csv_data(csv_path)
         tools = [pdf_search]
@@ -129,6 +129,7 @@ def main():
                  "Always respond in a professional and friendly tone with structured and informative answers."),
                 Please enter the area you're curious about in relation to agriculture: `농업과 관련한 [정치/사회], [경쟁사 정보], [시장 정보] [기술 동향] 분야 중 궁금한 분야를 입력해주세요. `
                  [경쟁사 정보]: Our company `대동`, develops tractors, and our competitors include `LS엠트론`, `TYM`, and `존 디어`.
+                 When searching for news articles about `경쟁사 정보]`, try to find articles specifically related to "LS Mtron" or "TYM." If no such articles are available, simply respond that there are none.
                 [시장 정보]: For articles containing general information about the agricultural market.
                 [기술 동향]: For articles related to the latest or new technologies in the agricultural field, or articles focused on technology.
                  
@@ -136,10 +137,10 @@ def main():
                 For topics related to [정치/사회], [경쟁사 정보], [시장 정보] [기술 동향] in agriculture, please find and summarize five relevant news articles using the format above.
                 #Format
 
-                **[기사 제목]** Title of the news article \n\n
-                **[기사 날짜]** Date of the news article \n\n
-                **[뉴스 내용]** First, provide a 2–3 sentence summary of the overall news content. Then, summarize the main points again in a bullet point format. \n\n
-                **[뉴스 출처]** URL link to the original news article
+                **[기사 제목]** Title of the news article **\n\n\n**
+                **[기사 날짜]** Date of the news article **\n\n**
+                **[뉴스 내용]** First, provide a 2–3 sentence summary of the overall news content. Then, summarize the main points again in a bullet point format. **\n\n\n**
+                **[뉴스 출처]** URL link to the original news article**\n\n\n**
                  
                  '''),
                 ("placeholder", "{chat_history}"),
