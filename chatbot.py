@@ -106,7 +106,7 @@ def main():
 
     # 특정 PDF 경로 지정
     # CSV 데이터 로드
-    csv_path = './data/news_classified_updated_utf8.csv' 
+    csv_path = './data/news_filtered.csv' 
     if csv_path:
         pdf_search = load_csv_data(csv_path)
         tools = [pdf_search]
