@@ -76,7 +76,7 @@ def main():
             csv_path = './data/news_filtered.csv' 
             pdf_search = load_csv_data(csv_path)
             tools = [pdf_search]
-            llm = ChatOpenAI(model_name="gpt-4", temperature=0)
+            llm = ChatOpenAI(model_name="gpt-4-mini", temperature=0)
             
             # 메모리 설정
             memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
@@ -109,25 +109,25 @@ def main():
 
                     **[기사 제목]** Title of the news article **n\n\n
                     **[기사 날짜]** Date of the news article **\n\n
-                    **[뉴스 내용]** Make sure to write it in **multiple lines**, not just one line. 
-                        1. First, write a **2–3 sentence** summary of the article.
+                    **[뉴스 내용]** Make sure to write it in **multiple lines**, not just one line.  \n\n
+                        1. First, write a **2–3 sentence** summary of the article. \n\n
                         2. Then, create a separate section summarizing the key points in **3–5 bullet points**. Each bullet should highlight a single key takeaway. **\n\n\n
                     **[뉴스 출처]** URL link to the original news article **\n\n\n
                     
                     
                     Make sure to follow the format of [기사 제목], [기사 날짜], [뉴스 내용], and [뉴스 출처, just like the ## Example. Ensure there is a line break after each entry.
                     ## Example (Strictly follow this)
-                    **[기사 제목]** Example Title  
-                    **[기사 날짜]** Example Date  
-                    **[뉴스 내용]**  |
-                    Summary: This is a brief summary of the news content. It should contain 2–3 sentences.  
+                    **[기사 제목]** Example Title  \n\n
+                    **[기사 날짜]** Example Date  \n\n
+                    **[뉴스 내용]**  \n\n
+                    Summary: This is a brief summary of the news content. It should contain 2–3 sentences.  \n\n
 
                     Key Points:  
-                    - • First key point of the news.  
-                    - • Second key point of the news.  
-                    - • Third key point of the news.  
+                    - • First key point of the news.   \n\n
+                    - • Second key point of the news.  \n\n
+                    - • Third key point of the news.  \n\n
 
-                    **[뉴스 출처]** URL
+                    **[뉴스 출처]** URL \n\n
                     '''),
                     ("placeholder", "{chat_history}"),
                     ("human", "{input} \n\n Be sure to include emoji in your responses."),
@@ -141,7 +141,8 @@ def main():
         agent_executor = st.session_state['agent_executor']
         
     if user_input:
-        response = chat_with_agent(user_input, agent_executor)
+        with st.spinner('답변을 생성하고 있습니다. 잠시만 기다려주세요...'):
+            response = chat_with_agent(user_input, agent_executor)
         st.session_state["messages"].append({"role": "user", "content": user_input})
         st.session_state["messages"].append({"role": "assistant", "content": response})
     print_messages()
