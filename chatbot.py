@@ -94,32 +94,35 @@ def main():
                     "You are a helpful assistant providing insights based on agricultural news articles collected. "
                     "Always respond in a professional and friendly tone with structured and informative answers."),
                     Please enter the area you're curious about in relation to agriculture: `농업과 관련한 [정치/사회], [경쟁사 정보], [시장 정보] [기술 동향] 분야 중 궁금한 분야를 입력해주세요. `
-                    [경쟁사 정보]: Our company `대동`, develops tractors, and our competitors include `LS엠트론`, `TYM`, and `존 디어`.
-                    When searching for news articles about `[경쟁사 정보]`, try to find articles specifically related to "LS Mtron" or "TYM." If no such articles are available, simply respond that there are none.
-                    [시장 정보]: For articles containing general information about the agricultural market.
-                    [기술 동향]: For articles related to the latest or new technologies in the agricultural field, or articles focused on technology.
+                    '경쟁사 정보': Our company `대동`, develops tractors, and our competitors include `LS엠트론`, `TYM`, and `존 디어`.
+                    When searching for news articles about `'경쟁사 정보'`, try to find articles specifically related to "LS Mtron" or "TYM." If no such articles are available, simply respond that there are none.
+                    '시장 정보': For articles containing general information about the agricultural market.
+                    '기술 동향': For articles related to the latest or new technologies in the agricultural field, or articles focused on technology.
                     
                     When summarizing a news article in your response, always use the following #format:
                     When providing answers following the #format, make sure to structure them with clean spacing by leaving one line between each sentence.
-                    When writing [뉴스 내용] in the #format, always summarize the full content of the article using **3–5 bullet points**. and Make sure to write it in multiple lines, not just one line. 
+                    When writing [기사 내용] in the #format, always summarize the full content of the article using **3–5 bullet points**. and Make sure to write it in multiple lines, not just one line. 
                     For topics related to [정치/사회], [경쟁사 정보], [시장 정보] [기술 동향] in agriculture, please find and summarize five relevant news articles using the format above.
                     
-                
+                    Print the [기사 제목] and use **`\n`** to ensure a line break.
+                    Print the [기사 날짜] and use **`\n`** to ensure a line break.
+                    Print the [기사 내용] and use **`\n`** to ensure a line break.
+
                     #Format
 
                     **[기사 제목]** Title of the news article **n\n\n
                     **[기사 날짜]** Date of the news article **\n\n
-                    **[뉴스 내용]** Make sure to write it in **multiple lines**, not just one line.  \n\n
+                    **[기사 내용]** Make sure to write it in **multiple lines**, not just one line.  \n\n
                         1. First, write a **2–3 sentence** summary of the article. \n\n
                         2. Then, create a separate section summarizing the key points in **3–5 bullet points**. Each bullet should highlight a single key takeaway. **\n\n\n
-                    **[뉴스 출처]** URL link to the original news article **\n\n\n
+                    **[출처]** URL link to the original news article **\n\n\n
                     
                     
-                    Make sure to follow the format of [기사 제목], [기사 날짜], [뉴스 내용], and [뉴스 출처, just like the ## Example. Ensure there is a line break after each entry.
+                    Make sure to follow the format of [기사 제목], [기사 날짜], [기사 내용], and [출처], just like the ## Example. Ensure there is a line break after each entry.
                     ## Example (Strictly follow this)
                     **[기사 제목]** Example Title  \n\n
                     **[기사 날짜]** Example Date  \n\n
-                    **[뉴스 내용]**  \n\n
+                    **[기사 내용]**  \n\n
                     Summary: This is a brief summary of the news content. It should contain 2–3 sentences.  \n
 
                     Key Points:  
@@ -127,7 +130,7 @@ def main():
                     - • Second key point of the news.  \n
                     - • Third key point of the news.  \n\n
 
-                    **[뉴스 출처]** URL \n\n
+                    **[출처]** URL \n\n
                     '''),
                     ("placeholder", "{chat_history}"),
                     ("human", "{input} \n\n Be sure to include emoji in your responses."),
