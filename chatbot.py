@@ -5,115 +5,71 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader
-from langchain_community.chat_message_histories import ChatMessageHistory
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-from langchain.tools.retriever import create_retriever_tool
-from langchain.prompts import ChatPromptTemplate
+from langchain.docstore.document import Document
+from langchain.tools import Tool
 from langchain.agents import create_tool_calling_agent, AgentExecutor
+from langchain.prompts import ChatPromptTemplate
 from dotenv import load_dotenv
 import pandas as pd
-from langchain.docstore.document import Document
-from langchain.tools import Tool  # 추가 임포트
 
-
-# .env 파일 로드
+# 환경 변수 설정
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 os.environ['OPENAI_API_KEY'] = st.secrets["OPENAI_API_KEY"]
-# .env 파일 로드
 
+@st.cache_resource
 def load_csv_data(csv_path):
-    # CSV 파일에서 기사 데이터를 로드
-    df = pd.read_csv(csv_path)
-    
-    # 결측값 처리 (NaN 값을 빈 문자열로 대체)
-    df = df.fillna("")
-    
-    # 기사 데이터를 Document 형태로 변환
-    documents = [
-        Document(
-            page_content=row['Content'],
-            metadata={"title": row['Title'], "date": row['date'], "url": row['URL']}
-        )
-        for _, row in df.iterrows()
-        if row['Content'].strip()  # Content가 비어 있지 않은 경우만 처리
-    ]
-    
-    # 텍스트 분할기 설정
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=20)
-    split_docs = text_splitter.split_documents(documents)
-
-    # FAISS 인덱스 생성
-    vector = FAISS.from_documents(split_docs, OpenAIEmbeddings())
+    index_path = 'faiss_index'
+    if os.path.exists(index_path):
+        # 기존 FAISS 인덱스 로드
+        vector = FAISS.load_local(index_path, OpenAIEmbeddings())
+    else:
+        # CSV 데이터 로드 및 처리
+        df = pd.read_csv(csv_path)
+        df = df.fillna("")
+        documents = [
+            Document(
+                page_content=row['Content'],
+                metadata={"title": row['Title'], "date": row['date'], "url": row['URL']}
+            )
+            for _, row in df.iterrows()
+            if row['Content'].strip()
+        ]
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=20)
+        split_docs = text_splitter.split_documents(documents)
+        vector = FAISS.from_documents(split_docs, OpenAIEmbeddings())
+        # FAISS 인덱스 저장
+        vector.save_local(index_path)
     retriever = vector.as_retriever()
-
-    # 도구로 변환
     tool = Tool(
         name="news_search",
         func=retriever.get_relevant_documents,
         description="Search for relevant agricultural news articles.",
     )
-
     return tool
 
-def load_pdf_files(pdf_paths):
-    all_documents = []
-
-    for pdf_path in pdf_paths:
-        # PyPDFLoader를 사용하여 파일 로드
-        loader = PyPDFLoader(pdf_path)
-        documents = loader.load()
-        all_documents.extend(documents)
-
-    # 텍스트 분할기 설정
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=20)
-    split_docs = text_splitter.split_documents(all_documents)
-
-    # FAISS 인덱스 설정 및 생성
-    vector = FAISS.from_documents(split_docs, OpenAIEmbeddings())
-    retriever = vector.as_retriever()
-
-    # 도구 정의
-    retriever_tool = create_retriever_tool(
-        retriever,
-        name="pdf_search",
-        description="Use this tool to search information from the PDF document."
-    )
-    return retriever_tool
-
-# 에이전트와 대화하는 함수
 def chat_with_agent(user_input, agent_executor):
     result = agent_executor({"input": user_input})
-    response = result['output']  # 명시적으로 출력 키를 처리
+    response = result['output']
     return response
 
-# 대화 내용 출력하는 함수
 def print_messages():
     for msg in st.session_state["messages"]:
         st.chat_message(msg['role']).write(msg['content'])
 
-# Streamlit 메인 코드
 def main():
-    # 페이지 설정
     st.set_page_config(page_title="농업 뉴스 Q&A", layout="wide", page_icon="🌾")
-
     st.image('Maporter_image.png', width=600)
     st.markdown('---')
-    st.title("안녕하세요! '대동 마포터' 입니다")  # 시작 타이틀
-
-    # 세션 초기화
+    st.title("안녕하세요! '대동 마포터' 입니다")
+    
     if "messages" not in st.session_state:
         st.session_state["messages"] = []
-
-    # 특정 PDF 경로 지정
-    # CSV 데이터 로드
-    csv_path = './data/news_filtered.csv' 
-    if csv_path:
+    
+    if 'agent_executor' not in st.session_state:
+        csv_path = './data/news_filtered.csv' 
         pdf_search = load_csv_data(csv_path)
         tools = [pdf_search]
-
-        # LLM 설정
         llm = ChatOpenAI(model_name="gpt-4", temperature=0)
-
         # 프롬프트 설정
         prompt = ChatPromptTemplate.from_messages(
             [
@@ -153,7 +109,7 @@ def main():
                 ## Example (Strictly follow this)
                 **[기사 제목]** Example Title  
                 **[기사 날짜]** Example Date  
-                **[뉴스 내용]**  
+                **[뉴스 내용]**  |
                 Summary: This is a brief summary of the news content. It should contain 2–3 sentences.  
 
                 Key Points:  
@@ -168,25 +124,16 @@ def main():
                 ("placeholder", "{agent_scratchpad}"),
             ]
         )
-
-        # 에이전트 생성
         agent = create_tool_calling_agent(llm, tools, prompt)
-
-        # AgentExecutor 정의
         agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+        st.session_state['agent_executor'] = agent_executor
 
-        # 사용자 입력 처리
-        user_input = st.chat_input('질문이 무엇인가요?')
-
-        if user_input:
-            response = chat_with_agent(user_input, agent_executor)
-
-            # 메시지를 세션에 추가
-            st.session_state["messages"].append({"role": "user", "content": user_input})
-            st.session_state["messages"].append({"role": "assistant", "content": response})
-
-        # 대화 내용 출력
-        print_messages()
+    user_input = st.chat_input('질문이 무엇인가요?')
+    if user_input:
+        response = chat_with_agent(user_input, st.session_state['agent_executor'])
+        st.session_state["messages"].append({"role": "user", "content": user_input})
+        st.session_state["messages"].append({"role": "assistant", "content": response})
+    print_messages()
 
 if __name__ == "__main__":
     main()
