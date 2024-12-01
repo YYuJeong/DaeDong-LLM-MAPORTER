@@ -120,11 +120,11 @@ def main():
                     **[기사 제목]** Example Title  \n\n
                     **[기사 날짜]** Example Date  \n\n
                     **[뉴스 내용]**  \n\n
-                    Summary: This is a brief summary of the news content. It should contain 2–3 sentences.  \n\n
+                    Summary: This is a brief summary of the news content. It should contain 2–3 sentences.  \n
 
                     Key Points:  
-                    - • First key point of the news.   \n\n
-                    - • Second key point of the news.  \n\n
+                    - • First key point of the news.   \n
+                    - • Second key point of the news.  \n
                     - • Third key point of the news.  \n\n
 
                     **[뉴스 출처]** URL \n\n
