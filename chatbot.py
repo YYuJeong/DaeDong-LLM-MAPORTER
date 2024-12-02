@@ -13,6 +13,7 @@ from langchain.agents import create_tool_calling_agent, AgentExecutor
 # .env 파일 로드
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 os.environ['OPENAI_API_KEY'] = st.secrets["OPENAI_API_KEY"]
+
 # .env 파일 로드
 @st.cache_resource
 def load_csv_data(csv_path):
@@ -32,7 +33,7 @@ def load_csv_data(csv_path):
             for _, row in df.iterrows()
             if row['Content'].strip()
         ]
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=20)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=50, chunk_overlap=10)
         split_docs = text_splitter.split_documents(documents)
         vector = FAISS.from_documents(split_docs, OpenAIEmbeddings())
         # FAISS 인덱스 저장
@@ -97,9 +98,17 @@ def main():
             When searching for news articles about `'경쟁사 정보'`, try to find articles specifically related to "LS Mtron" or "TYM." If no such articles are available, simply respond that there are none.
             '시장 정보': For articles containing general information about the agricultural market.
             '기술 동향': For articles related to the latest or new technologies in the agricultural field, or articles focused on technology.
-            Our company, Daedong, is an agricultural technology and manufacturing company that develops agricultural machinery such as tractors, rice transplanters, and combines. 
-            If a user requests an article about `대동`, ensure that it is related to `대동, which develops tractors, rice transplanters, combines, and other agricultural machinery.`
-            Do not show articles simply because they contain the word `대동`, `대동 주식회사`, `주식회사 대동`, `(주)대동`
+            
+
+
+            If the user's question includes the keyword "Daedong," please follow the #Procedure below.
+            
+            #Procedure
+            1. Our company, Daedong, is an agricultural technology and manufacturing company that develops agricultural machinery such as tractors, rice transplanters, and combines. 
+            2. If a user requests an article about `대동`, ensure that it is related to `대동, which develops tractors, rice transplanters, combines, and other agricultural machinery.`
+            3. Do not show articles simply because they contain the word `대동`, `대동 주식회사`, `주식회사 대동`, `(주)대동`
+            4. When requesting articles about `대동`, provide articles found using keywords such as `대동 공업`, `(트랙터, 대동)` or `(기술, 대동)`
+            
 
             
             When summarizing a news article in your response, always use the following #format:
