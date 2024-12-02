@@ -148,7 +148,7 @@ def main():
                     ("placeholder", "{agent_scratchpad}"),
                 ]
             )
-            agent = create_tool_calling_agent(llm, tools, prompt, memory=memory)
+            agent = create_tool_calling_agent(llm, tools, prompt)
             agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True, memory=memory)
             st.session_state['agent_executor'] = agent_executor
     else:
