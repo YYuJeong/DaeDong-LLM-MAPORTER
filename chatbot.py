@@ -109,7 +109,8 @@ def main():
             #Procedure
             1. Daedong, is an agricultural technology and manufacturing company that develops agricultural machinery such as tractors, rice transplanters, and combines. 
             2. Find all articles that include the keyword "대동."
-            3. Among the found articles, display only those that contain content related to tractors, rice transplanters, agricultural technology, or combines.
+            3. Among the found articles, display only those that contain content related to Agricultural machinery,  tractors, rice transplanters, agricultural technology, or combines.
+            4. Exclude articles about `sweet potatoes` or `대동농협`
 
             When summarizing a news article in your response, always use the following #format:
             When providing answers following the #format, make sure to structure them with clean spacing by leaving one line between each sentence.
