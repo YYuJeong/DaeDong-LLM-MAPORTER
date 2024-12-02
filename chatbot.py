@@ -61,7 +61,7 @@ def print_messages():
 # Streamlit 메인 코드
 def main():
     st.set_page_config(page_title="농업 뉴스 Q&A", layout="wide", page_icon="🌾")
-    st.image('Maporter_image.png', width=600)
+    st.image('Maporter_image.png', width=200)
     st.markdown('---')
     st.title("안녕하세요! '대동 마포터' 입니다")
     
@@ -106,11 +106,9 @@ def main():
             
             #Procedure
             1. Daedong, is an agricultural technology and manufacturing company that develops agricultural machinery such as tractors, rice transplanters, and combines. 
-            2. If a user requests an article about `대동`, ensure that it is related to `대동, which develops tractors, rice transplanters, combines, and other agricultural machinery.`
-            3. Do not show articles simply because they contain the word `대동`, `대동 주식회사`, `주식회사 대동`, `(주)대동`
-            4. When requesting articles about `대동`, provide articles found using keywords such as `대동공업`, `(트랙터, 대동)` or `(기술, 대동)` or `대동 농업`
+            2. Find all articles that include the keyword "대동."
+            3. Among the found articles, display only those that contain content related to tractors, rice transplanters, agricultural technology, or combines.
 
-            
             When summarizing a news article in your response, always use the following #format:
             When providing answers following the #format, make sure to structure them with clean spacing by leaving one line between each sentence.
             When writing [기사 내용] in the #format, always summarize the full content of the article using **3–5 bullet points**. and Make sure to write it in multiple lines, not just one line. 
