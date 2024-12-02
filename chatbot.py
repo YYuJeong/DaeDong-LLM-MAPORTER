@@ -14,7 +14,8 @@ import pandas as pd
 # 환경 변수 설정
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 os.environ['OPENAI_API_KEY'] = st.secrets["OPENAI_API_KEY"]
-@st.cacahe_resource
+
+@st.cache_resource
 def load_csv_data(csv_path):
     index_path = 'faiss_index'
     if os.path.exists(index_path):
