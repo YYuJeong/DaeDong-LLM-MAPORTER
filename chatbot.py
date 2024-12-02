@@ -19,6 +19,8 @@ os.environ['OPENAI_API_KEY'] = st.secrets["OPENAI_API_KEY"]
 
 @st.cache_resource
 def load_csv_data(csv_path):
+            # 임베딩 모델 생성
+    embeddings = OpenAIEmbeddings()
     """CSV 데이터를 로드하고 FAISS 인덱스를 생성하거나 캐싱된 인덱스를 로드합니다."""
     index_path = 'faiss_index'
     if os.path.exists(index_path):
@@ -35,8 +37,6 @@ def load_csv_data(csv_path):
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         split_docs = text_splitter.split_documents(documents)
         
-        # 임베딩 모델 생성
-        embeddings = OpenAIEmbeddings()
         
         # FAISS 인덱스 생성
         vector = FAISS.from_documents(split_docs, embeddings)
