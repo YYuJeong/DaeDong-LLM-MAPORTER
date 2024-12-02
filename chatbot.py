@@ -105,11 +105,10 @@ def main():
             If the user's question includes the keyword "Daedong," please follow the #Procedure below.
             
             #Procedure
-            1. Our company, Daedong, is an agricultural technology and manufacturing company that develops agricultural machinery such as tractors, rice transplanters, and combines. 
+            1. Daedong, is an agricultural technology and manufacturing company that develops agricultural machinery such as tractors, rice transplanters, and combines. 
             2. If a user requests an article about `대동`, ensure that it is related to `대동, which develops tractors, rice transplanters, combines, and other agricultural machinery.`
             3. Do not show articles simply because they contain the word `대동`, `대동 주식회사`, `주식회사 대동`, `(주)대동`
             4. When requesting articles about `대동`, provide articles found using keywords such as `대동공업`, `(트랙터, 대동)` or `(기술, 대동)` or `대동 농업`
-            
 
             
             When summarizing a news article in your response, always use the following #format:
