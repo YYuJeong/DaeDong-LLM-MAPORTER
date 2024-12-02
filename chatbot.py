@@ -11,6 +11,7 @@ from langchain.prompts import ChatPromptTemplate
 from langchain.memory import ConversationBufferMemory
 from langchain_openai import OpenAIEmbeddings
 import pandas as pd
+from langchain.agents import initialize_agent, AgentType
 
 # 환경 변수 설정
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
@@ -21,7 +22,7 @@ def load_csv_data(csv_path):
     """CSV 데이터를 로드하고 FAISS 인덱스를 생성하거나 캐싱된 인덱스를 로드합니다."""
     index_path = 'faiss_index'
     if os.path.exists(index_path):
-        vector = FAISS.load_local(index_path, OpenAIEmbeddings())
+        vector = FAISS.load_local(index_path)
     else:
         df = pd.read_csv(csv_path).fillna("")
         documents = [
@@ -33,7 +34,12 @@ def load_csv_data(csv_path):
         ]
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         split_docs = text_splitter.split_documents(documents)
-        vector = FAISS.from_documents(split_docs ,OpenAIEmbeddings()) 
+        
+        # 임베딩 모델 생성
+        embeddings = OpenAIEmbeddings()
+        
+        # FAISS 인덱스 생성
+        vector = FAISS.from_documents(split_docs, embeddings)
         vector.save_local(index_path)
     retriever = vector.as_retriever()
     tool = Tool(
@@ -42,6 +48,7 @@ def load_csv_data(csv_path):
         description="Search for relevant agricultural news articles."
     )
     return tool
+
 
 @st.cache_resource
 def initialize_agent(csv_path):
@@ -116,8 +123,18 @@ def initialize_agent(csv_path):
             ("placeholder", "{agent_scratchpad}"),
         ]
     )
-    agent = create_tool_calling_agent(llm, tools, prompt, memory=memory)
-    return AgentExecutor(agent=agent, tools=tools, memory=memory)
+    
+    agent_executor = initialize_agent(
+        tools=tools,
+        llm=llm,
+        agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION,
+        prompt=prompt,
+        memory=memory,
+        verbose=True
+    )
+    return agent_executor
+
+
 
 def chat_with_agent(user_input, agent_executor):
     """에이전트와 대화하여 응답을 반환합니다."""
