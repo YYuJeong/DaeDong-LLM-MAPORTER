@@ -20,7 +20,7 @@ def load_csv_data(csv_path):
     index_path = 'faiss_index'
     if os.path.exists(index_path):
         # 기존 FAISS 인덱스 로드
-        vector = FAISS.load_local(index_path, OpenAIEmbeddings())
+        vector = FAISS.load_local(index_path, OpenAIEmbeddings(), allow_dangerous_deserialization=True)
     else:
         # CSV 데이터 로드 및 처리
         df = pd.read_csv(csv_path)
