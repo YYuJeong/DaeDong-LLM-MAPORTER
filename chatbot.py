@@ -2,7 +2,7 @@
 import os
 import streamlit as st
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain.chat_models import ChatOpenAI
 from langchain.docstore.document import Document
 from langchain.tools import Tool
@@ -24,7 +24,7 @@ def load_csv_data(csv_path):
     """CSV 데이터를 로드하고 FAISS 인덱스를 생성하거나 캐싱된 인덱스를 로드합니다."""
     index_path = 'faiss_index'
     if os.path.exists(index_path):
-        vector = FAISS.load_local(index_path, embeddings)
+        vector = FAISS.load_local(index_path, embeddings, allow_dangerous_deserialization=True)
     else:
         df = pd.read_csv(csv_path).fillna("")
         documents = [
