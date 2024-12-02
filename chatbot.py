@@ -18,10 +18,9 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 os.environ['OPENAI_API_KEY'] = st.secrets["OPENAI_API_KEY"]
 
 @st.cache_resource
-def load_csv_data(csv_path):
-            # 임베딩 모델 생성
-    embeddings = OpenAIEmbeddings()
+def load_csv_data(csv_path: str):
     """CSV 데이터를 로드하고 FAISS 인덱스를 생성하거나 캐싱된 인덱스를 로드합니다."""
+    embeddings = OpenAIEmbeddings()
     index_path = 'faiss_index'
     if os.path.exists(index_path):
         vector = FAISS.load_local(index_path, embeddings, allow_dangerous_deserialization=True)
@@ -36,9 +35,7 @@ def load_csv_data(csv_path):
         ]
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         split_docs = text_splitter.split_documents(documents)
-        
-        
-        # FAISS 인덱스 생성
+
         vector = FAISS.from_documents(split_docs, embeddings)
         vector.save_local(index_path)
     retriever = vector.as_retriever()
@@ -50,12 +47,13 @@ def load_csv_data(csv_path):
     return tool
 
 
-@st.cache_resource
-def initialize_agent(csv_path):
-    """에이전트 초기화 함수로, 로드된 도구와 프롬프트를 기반으로 에이전트를 생성합니다."""
-    news_search_tool = load_csv_data(csv_path)
+def initialize_agent_with_tools(_csv_path: str):
+    """에이전트를 초기화합니다."""
+    # 캐싱된 데이터 로드
+    news_search_tool = load_csv_data(_csv_path)
     tools = [news_search_tool]
-    llm = ChatOpenAI(model_name="gpt-4o-mini", temperature=0)
+
+    llm = ChatOpenAI(model_name="gpt-4", temperature=0)
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -123,7 +121,7 @@ def initialize_agent(csv_path):
             ("placeholder", "{agent_scratchpad}"),
         ]
     )
-    
+
     agent_executor = initialize_agent(
         tools=tools,
         llm=llm,
@@ -156,7 +154,7 @@ def main():
 
     if "agent_executor" not in st.session_state:
         with st.spinner("에이전트를 초기화하고 있습니다. 잠시만 기다려주세요..."):
-            st.session_state["agent_executor"] = initialize_agent('./data/news_filtered.csv')
+            st.session_state["agent_executor"] = initialize_agent_with_tools('./data/news_filtered.csv')
 
     user_input = st.chat_input('질문이 무엇인가요?')
     if user_input:
