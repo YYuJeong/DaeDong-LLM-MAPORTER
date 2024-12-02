@@ -20,7 +20,7 @@ def load_csv_data(csv_path):
     """CSV 데이터를 로드하고 FAISS 인덱스를 생성하거나 캐싱된 인덱스를 로드합니다."""
     index_path = 'faiss_index'
     if os.path.exists(index_path):
-        vector = FAISS.load_local(index_path,OpenAIEmbeddings())
+        vector = FAISS.load_local(index_path)
     else:
         df = pd.read_csv(csv_path).fillna("")
         documents = [
@@ -32,7 +32,7 @@ def load_csv_data(csv_path):
         ]
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         split_docs = text_splitter.split_documents(documents)
-        vector = FAISS.from_documents(split_docs)
+        vector = FAISS.from_documents(split_docs ,OpenAIEmbeddings()) 
         vector.save_local(index_path)
     retriever = vector.as_retriever()
     tool = Tool(
